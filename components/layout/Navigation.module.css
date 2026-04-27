@@ -1,0 +1,93 @@
+.navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.scrolled {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  max-width: 96rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navItems {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .navItems {
+    display: flex;
+  }
+}
+
+.navLink {
+  font-size: 0.875rem;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--foreground);
+}
+
+.navLink.active {
+  color: white;
+}
+
+.highlight {
+  position: absolute;
+  inset: 0;
+  background: var(--primary);
+  border-radius: 9999px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.navLink.active .highlight {
+  opacity: 1;
+}
+
+.navLink:hover .highlight {
+  opacity: 0.2;
+}
+
+.text {
+  position: relative;
+  z-index: 10;
+}
+
+.sayHello {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.sayHello:hover {
+  transform: scale(1.05);
+}
+
+.sayHelloImage {
+  height: 2.5rem;
+  width: auto;
+  object-fit: contain;
+}

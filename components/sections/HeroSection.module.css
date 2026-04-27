@@ -1,0 +1,200 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.gradientBg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, 
+    rgba(var(--primary-rgb), 0.05) 0%, 
+    transparent 50%, 
+    transparent 100%
+  );
+}
+
+.backgroundLogo {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) translateX(33%);
+  width: 120vw;
+  height: 120vh;
+  object-fit: contain;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob1 {
+  width: 500px;
+  height: 500px;
+  background: rgba(var(--primary-rgb), 0.2);
+  top: -8rem;
+  left: -8rem;
+}
+
+.blob2 {
+  width: 400px;
+  height: 400px;
+  background: rgba(var(--secondary-rgb), 0.3);
+  top: 33%;
+  right: -5rem;
+}
+
+.blob3 {
+  width: 300px;
+  height: 300px;
+  background: rgba(var(--accent-rgb), 0.4);
+  bottom: 5rem;
+  left: 25%;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  text-align: left;
+  padding: 0 1.5rem;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .content {
+    margin-left: 4rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .content {
+    margin-left: 6rem;
+  }
+}
+
+.badge {
+  margin-bottom: 2rem;
+}
+
+.badgeContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  font-size: 0.875rem;
+}
+
+.titleContainer {
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  letter-spacing: 0.3em;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: 2rem;
+  line-height: 0.9;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 4.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 6rem;
+  }
+}
+
+.titleLine {
+  overflow: hidden;
+}
+
+.titleLine:last-child {
+  margin-top: 0.5rem;
+}
+
+.name {
+  display: inline-block;
+  color: var(--primary);
+}
+
+.description {
+  font-size: 1.125rem;
+  color: var(--muted-foreground);
+  max-width: 32rem;
+  margin: 0 auto 3rem auto;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .description {
+    font-size: 1.25rem;
+    margin: 0 0 3rem 0;
+  }
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+  .cta {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+}
+
+.ctaButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.scrollIndicator {
+  position: fixed;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.scrollContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.scrollText {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+}
+
+.scrollContent svg {
+  color: var(--muted-foreground);
+}
