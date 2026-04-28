@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react"
 import { motion, useInView } from "framer-motion"
-import { Eye, Code2, Camera } from "lucide-react"
+import { Eye, Code2, Camera, ChevronLeft, ChevronRight } from "lucide-react"
 import { projects } from "@/lib/data"
 import { SplitText } from "@/components/animations/TextAnimations"
 import { FloatingBlob } from "@/components/animations/InteractiveElements"
@@ -16,31 +16,40 @@ export function ProjectsSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [currentSnapshots, setCurrentSnapshots] = useState<{ [key: number]: number }>({})
 
-  // Auto-cycle through snapshots for projects without demos
-  useEffect(() => {
-    // Debug: Check which projects have snapshots
-    projects.forEach((project, index) => {
-      console.log(`Project ${index} (${project.title}):`, {
-        demoLink: project.demoLink,
-        snapshotsLength: project.snapshots.length,
-        snapshots: project.snapshots,
-        shouldShowSnapshots: !project.demoLink && project.snapshots.length > 0
-      })
-    })
+  // Handle manual navigation
+  const nextSnapshot = (projectIndex: number) => {
+    const project = projects[projectIndex]
+    if (project.snapshots.length > 1) {
+      setCurrentSnapshots(prev => ({
+        ...prev,
+        [projectIndex]: ((prev[projectIndex] || 0) + 1) % project.snapshots.length
+      }))
+    }
+  }
 
+  const prevSnapshot = (projectIndex: number) => {
+    const project = projects[projectIndex]
+    if (project.snapshots.length > 1) {
+      setCurrentSnapshots(prev => ({
+        ...prev,
+        [projectIndex]: ((prev[projectIndex] || 0) - 1 + project.snapshots.length) % project.snapshots.length
+      }))
+    }
+  }
+
+  // Auto-cycle through snapshots for projects without demos (slower since we have manual controls)
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSnapshots(prev => {
         const newSnapshots = { ...prev }
         projects.forEach((project, index) => {
           if (!project.demoLink && project.snapshots.length > 1) {
-            const newIndex = ((prev[index] || 0) + 1) % project.snapshots.length
-            newSnapshots[index] = newIndex
-            console.log(`Project ${index} cycling to snapshot ${newIndex}:`, project.snapshots[newIndex])
+            newSnapshots[index] = ((prev[index] || 0) + 1) % project.snapshots.length
           }
         })
         return newSnapshots
       })
-    }, 3000) // Change snapshot every 3 seconds
+    }, 8000) // Change snapshot every 8 seconds (slower for manual control)
 
     return () => clearInterval(interval)
   }, [])
@@ -91,8 +100,6 @@ export function ProjectsSection() {
                       }}
                       initial={{ opacity: 0 }}
                       transition={{ duration: 0.5, opacity: { duration: 0.3 } }}
-                      onError={(e) => console.error('Snapshot image failed to load:', project.snapshots[currentSnapshots[index] || 0])}
-                      onLoad={() => console.log('Snapshot image loaded:', project.snapshots[currentSnapshots[index] || 0])}
                     />
                   ) : (
                     <motion.img 
@@ -180,6 +187,32 @@ export function ProjectsSection() {
                       <span className="text-xs text-muted-foreground">
                         {(currentSnapshots[index] || 0) + 1} / {project.snapshots.length}
                       </span>
+                    </div>
+                  )}
+
+                  {/* Navigation buttons for snapshots */}
+                  {!project.demoLink && project.snapshots.length > 1 && (
+                    <div className="absolute bottom-3 right-3 flex gap-1">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          prevSnapshot(index)
+                        }}
+                        className="w-8 h-8 rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                        aria-label="Previous snapshot"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          nextSnapshot(index)
+                        }}
+                        className="w-8 h-8 rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                        aria-label="Next snapshot"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
                     </div>
                   )}
                 </motion.div>

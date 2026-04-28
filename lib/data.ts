@@ -51,9 +51,7 @@ export const projects = [
     tags: ["PHP", "MySQL", "JavaScript"],
     image: "/img/projects/project-01.png",
     snapshots: [
-      "/img/projects/project-01-snapshot-1.png",
-      "/img/projects/project-01-snapshot-2.png",
-      "/img/projects/project-01-snapshot-3.png"
+     
     ],
     demoLink: null,
     githubLink: null,
@@ -74,7 +72,11 @@ export const projects = [
     description: "Developed an ERP module to optimize procurement and inventory workflows, enhancing stock visibility, reducing processing time, and improving operational decision-making through centralized data management.",
     tags: ["React", "Node.js", "PostgreSQL"],
     image: "/img/projects/project-03.png",
-    snapshots: [],
+    snapshots: [
+       "/img/projects/project-03-snapshot-1.png",
+      "/img/projects/project-03-snapshot-2.png",
+      "/img/projects/project-03-snapshot-3.png"
+    ],
     demoLink: null,
     githubLink: null,
     color: "from-purple-100 to-violet-100",
