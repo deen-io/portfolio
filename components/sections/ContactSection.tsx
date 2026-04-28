@@ -2,7 +2,7 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { Github, Linkedin, Mail, Send } from "lucide-react"
+import { Github, Linkedin, Mail, Send, Download } from "lucide-react"
 import { personalInfo } from "@/lib/data"
 import { SplitText } from "@/components/animations/TextAnimations"
 import { FloatingBlob, SparkleDecoration, MagneticButton } from "@/components/animations/InteractiveElements"
@@ -53,7 +53,7 @@ export function ContactSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.7 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
           >
             <MagneticButton>
               <Button 
@@ -64,6 +64,32 @@ export function ContactSection() {
                 <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2">
                   <Send className="w-4 h-4" />
                   Send me an email
+                </a>
+              </Button>
+            </MagneticButton>
+          </motion.div>
+
+          {/* Resume Download */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.8 }}
+            className="flex justify-center mb-16"
+          >
+            <MagneticButton>
+              <Button 
+                variant="outline"
+                size="lg" 
+                className="rounded-full border-primary/30 text-primary hover:bg-primary/10 hover:border-primary group"
+                asChild
+              >
+                <a 
+                  href="/files/Dina Fajardo CV.pdf" 
+                  download="Dina_Fajardo_CV.pdf"
+                  className="flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4 group-hover:animate-bounce" />
+                  Download Resume
                 </a>
               </Button>
             </MagneticButton>

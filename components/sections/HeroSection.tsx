@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
-import { Sparkles, ArrowDown, ArrowUpRight } from 'lucide-react'
+import { Sparkles, ArrowDown, ArrowUpRight, Download } from 'lucide-react'
 import { personalInfo } from '@/lib/data'
 import { TextReveal } from '@/components/animations/TextAnimations'
 import { FloatingBlob, MagneticButton } from '@/components/animations/InteractiveElements'
@@ -101,7 +101,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
         >
           <MagneticButton>
             <Button 
@@ -120,14 +120,22 @@ export function HeroSection() {
               </a>
             </Button>
           </MagneticButton>
+          
           <MagneticButton>
             <Button 
-              variant="ghost" 
+              variant="outline"
               size="lg" 
-              className="rounded-full text-muted-foreground hover:text-foreground"
+              className="rounded-full border-primary/30 text-primary hover:bg-primary/10 hover:border-primary group"
               asChild
             >
-              <a href="#about">Learn More</a>
+              <a 
+                href="/files/Dina Fajardo CV.pdf" 
+                download="Dina_Fajardo_CV.pdf"
+                className="flex items-center gap-2"
+              >
+                <Download className="w-4 h-4 group-hover:animate-bounce" />
+                Download Resume
+              </a>
             </Button>
           </MagneticButton>
         </motion.div>

@@ -1,8 +1,8 @@
 'use client'
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { motion, useInView } from "framer-motion"
-import { ExternalLink, ArrowUpRight } from "lucide-react"
+import { Eye, Code2, Camera } from "lucide-react"
 import { projects } from "@/lib/data"
 import { SplitText } from "@/components/animations/TextAnimations"
 import { FloatingBlob } from "@/components/animations/InteractiveElements"
@@ -14,6 +14,36 @@ export function ProjectsSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [currentSnapshots, setCurrentSnapshots] = useState<{ [key: number]: number }>({})
+
+  // Auto-cycle through snapshots for projects without demos
+  useEffect(() => {
+    // Debug: Check which projects have snapshots
+    projects.forEach((project, index) => {
+      console.log(`Project ${index} (${project.title}):`, {
+        demoLink: project.demoLink,
+        snapshotsLength: project.snapshots.length,
+        snapshots: project.snapshots,
+        shouldShowSnapshots: !project.demoLink && project.snapshots.length > 0
+      })
+    })
+
+    const interval = setInterval(() => {
+      setCurrentSnapshots(prev => {
+        const newSnapshots = { ...prev }
+        projects.forEach((project, index) => {
+          if (!project.demoLink && project.snapshots.length > 1) {
+            const newIndex = ((prev[index] || 0) + 1) % project.snapshots.length
+            newSnapshots[index] = newIndex
+            console.log(`Project ${index} cycling to snapshot ${newIndex}:`, project.snapshots[newIndex])
+          }
+        })
+        return newSnapshots
+      })
+    }, 3000) // Change snapshot every 3 seconds
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <section id="projects" className="py-32 px-6 relative">
@@ -48,15 +78,33 @@ export function ProjectsSection() {
                   animate={{ scale: hoveredIndex === index ? 1.02 : 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <motion.img 
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                    animate={{ 
-                      scale: hoveredIndex === index ? 1.1 : 1,
-                    }}
-                    transition={{ duration: 0.5 }}
-                  />
+                  {/* Show snapshot or main image */}
+                  {!project.demoLink && project.snapshots.length > 0 ? (
+                    <motion.img 
+                      key={`${index}-${currentSnapshots[index] || 0}`}
+                      src={project.snapshots[currentSnapshots[index] || 0]}
+                      alt={`${project.title} snapshot`}
+                      className="w-full h-full object-cover blur-sm"
+                      animate={{ 
+                        scale: hoveredIndex === index ? 1.1 : 1,
+                        opacity: 1
+                      }}
+                      initial={{ opacity: 0 }}
+                      transition={{ duration: 0.5, opacity: { duration: 0.3 } }}
+                      onError={(e) => console.error('Snapshot image failed to load:', project.snapshots[currentSnapshots[index] || 0])}
+                      onLoad={() => console.log('Snapshot image loaded:', project.snapshots[currentSnapshots[index] || 0])}
+                    />
+                  ) : (
+                    <motion.img 
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                      animate={{ 
+                        scale: hoveredIndex === index ? 1.1 : 1,
+                      }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  )}
                   
                   {/* Animated overlay */}
                   <motion.div 
@@ -66,43 +114,84 @@ export function ProjectsSection() {
                     transition={{ duration: 0.3 }}
                   />
                   
-                  {/* View project button - only show if link is a valid URL */}
-                  {project.link && project.link !== "#" && project.link.startsWith("http") && (
+                  {/* Project action buttons or snapshot indicator */}
+                  {project.demoLink || project.githubLink ? (
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center gap-3"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {project.demoLink && (
+                        <Button 
+                          size="sm" 
+                          className="rounded-full bg-card/90 text-foreground hover:bg-card border border-border/20"
+                          asChild
+                        >
+                          <a href={project.demoLink} target="_blank" rel="noopener noreferrer">
+                            <Eye className="w-4 h-4 mr-2" />
+                            Live Demo
+                          </a>
+                        </Button>
+                      )}
+                      {project.githubLink && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="rounded-full bg-muted/90 text-foreground hover:bg-muted border border-border/20"
+                          asChild
+                        >
+                          <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                            <Code2 className="w-4 h-4 mr-2" />
+                            Code
+                          </a>
+                        </Button>
+                      )}
+                    </motion.div>
+                  ) : project.snapshots.length > 0 && (
                     <motion.div
                       className="absolute inset-0 flex items-center justify-center"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Button 
-                        size="sm" 
-                        className="rounded-full bg-card/90 text-foreground hover:bg-card"
-                        asChild
-                      >
-                        <a href={project.link} target="_blank" rel="noopener noreferrer">
-                          View Project
-                          <ArrowUpRight className="w-4 h-4 ml-1" />
-                        </a>
-                      </Button>
+                      <div className="bg-card/90 backdrop-blur-sm rounded-full px-4 py-2 border border-border/20">
+                        <div className="flex items-center gap-2 text-sm text-foreground">
+                          <Camera className="w-4 h-4" />
+                          <span>Project Snapshot</span>
+                        </div>
+                      </div>
                     </motion.div>
+                  )}
+
+                  {/* Always visible snapshot indicator for projects without demos */}
+                  {!project.demoLink && project.snapshots.length > 0 && (
+                    <div className="absolute top-3 right-3 bg-muted/80 backdrop-blur-sm rounded-full px-3 py-1">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Camera className="w-3 h-3" />
+                        <span>Preview</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Snapshot counter for multiple snapshots */}
+                  {!project.demoLink && project.snapshots.length > 1 && (
+                    <div className="absolute bottom-3 left-3 bg-muted/80 backdrop-blur-sm rounded-full px-2 py-1">
+                      <span className="text-xs text-muted-foreground">
+                        {(currentSnapshots[index] || 0) + 1} / {project.snapshots.length}
+                      </span>
+                    </div>
                   )}
                 </motion.div>
                 
                 <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-serif text-2xl font-medium text-foreground">{project.title}</h3>
-                    <motion.a 
-                      href={project.link}
-                      whileHover={{ scale: 1.2, rotate: 45 }}
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      <ExternalLink className="w-5 h-5" />
-                    </motion.a>
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="font-serif text-2xl font-medium text-foreground flex-1">{project.title}</h3>
                   </div>
                   <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
                     {project.description}
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-5">
                     {project.tags.map((tag, i) => (
                       <motion.div
                         key={tag}
@@ -119,6 +208,47 @@ export function ProjectsSection() {
                       </motion.div>
                     ))}
                   </div>
+                  
+                  {/* Action buttons */}
+                  {(project.demoLink || project.githubLink || project.snapshots.length > 0) && (
+                    <div className="flex gap-2 pt-4 border-t border-border/20">
+                      {project.demoLink ? (
+                        <Button 
+                          size="sm" 
+                          className="flex-1 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+                          asChild
+                        >
+                          <a href={project.demoLink} target="_blank" rel="noopener noreferrer">
+                            <Eye className="w-4 h-4 mr-2" />
+                            Live Demo
+                          </a>
+                        </Button>
+                      ) : project.snapshots.length > 0 && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="flex-1 rounded-full border-border/50 text-muted-foreground cursor-default"
+                          disabled
+                        >
+                          <Camera className="w-4 h-4 mr-2" />
+                          Preview Only
+                        </Button>
+                      )}
+                      {project.githubLink && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="flex-1 rounded-full border-border/50 hover:bg-muted transition-all duration-300"
+                          asChild
+                        >
+                          <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                            <Code2 className="w-4 h-4 mr-2" />
+                            View Code
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
