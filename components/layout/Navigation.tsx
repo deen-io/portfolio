@@ -3,9 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { navigation } from '@/lib/data'
-import { FadeIn } from '@/components/animations/MotionComponents'
 import { MagneticButton } from '@/components/animations/InteractiveElements'
-import styles from './Navigation.module.css'
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
@@ -17,9 +15,9 @@ export function Navigation() {
       
       const sections = ["about", "skills", "projects", "experience", "contact"]
       for (const section of sections) {
-        const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
+        const el = document.getElementById(section)
+        if (el) {
+          const rect = el.getBoundingClientRect()
           if (rect.top <= 100 && rect.bottom >= 100) {
             setActiveSection(section)
             break
@@ -33,13 +31,15 @@ export function Navigation() {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
-      className={`${styles.navigation} ${scrolled ? styles.scrolled : ''}`}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, delay: 0.5 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? "bg-background/60 backdrop-blur-xl shadow-sm" : ""
+      }`}
     >
-      <div className={styles.container}>
-        <div className={styles.navItems}>
+      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="hidden md:flex items-center gap-8">
           {navigation.map((item, i) => (
             <motion.div
               key={item.name}
@@ -49,24 +49,28 @@ export function Navigation() {
             >
               <a
                 href={item.href}
-                className={`${styles.navLink} ${
+                className={`text-sm relative group transition-colors px-4 py-2 rounded-full ${
                   activeSection === item.name.toLowerCase() 
-                    ? styles.active 
-                    : ''
+                    ? "text-white" 
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <span className={styles.highlight} />
-                <span className={styles.text}>{item.name}</span>
+                {/* Pill-style background highlight */}
+                <span className={`absolute inset-0 bg-primary rounded-full transition-all duration-300 ${
+                  activeSection === item.name.toLowerCase() ? "opacity-100" : "opacity-0 group-hover:opacity-20"
+                }`} />
+                
+                <span className="relative z-10">{item.name}</span>
               </a>
             </motion.div>
           ))}
         </div>
         <MagneticButton>
-          <a href="#contact" className={styles.sayHello}>
+          <a href="#contact" className="block transition-transform duration-300 hover:scale-105">
             <img 
               src="/img/say-hello.png" 
               alt="Say Hello" 
-              className={styles.sayHelloImage}
+              className="h-10 w-auto object-contain"
             />
           </a>
         </MagneticButton>
