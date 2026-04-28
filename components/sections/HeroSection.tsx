@@ -32,7 +32,7 @@ export function HeroSection() {
         alt="" 
         className="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/3 w-[120vw] h-[120vh] object-contain opacity-20 pointer-events-none z-0"
         initial={{ opacity: 0, scale: 0.8, x: 100 }}
-        animate={{ opacity: 0.2, scale: 1, x: 0 }}
+        animate={{ opacity: 0.7, scale: 1, x: 0 }}
         transition={{ duration: 1, delay: 2 }}
       />
       
