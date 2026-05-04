@@ -16,7 +16,7 @@ export function AboutSection() {
       <FloatingBlob className="w-72 h-72 bg-secondary/20 -right-20 top-0" delay={1} />
       
       <div ref={ref} className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+        <div className="grid md:grid-cols-2 gap-16 items-start">
           {/* Image/Illustration side */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -74,16 +74,28 @@ export function AboutSection() {
               <SplitText delay={0.4}>A little bit about me</SplitText>
             </h2>
             <div className="space-y-5 text-muted-foreground leading-relaxed">
-              {personalInfo.aboutText.map((paragraph, index) => (
-                <motion.p
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                >
-                  {paragraph}
-                </motion.p>
-              ))}
+              {personalInfo.aboutText.map((paragraph, index) => {
+                const bulletItems = ["Backend systems (APIs, databases, business logic)", "Data-driven applications", "End-to-end feature development"];
+                const isBulletItem = bulletItems.includes(paragraph);
+                
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.6 + index * 0.1 }}
+                  >
+                    {isBulletItem ? (
+                      <div className="flex items-start gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary mt-3 flex-shrink-0" />
+                        <p>{paragraph}</p>
+                      </div>
+                    ) : (
+                      <p>{paragraph}</p>
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
             
             {/* Stats */}
@@ -109,6 +121,42 @@ export function AboutSection() {
             </motion.div>
           </motion.div>
         </div>
+
+        {/* What I bring to a team - Full width below */}
+        <motion.div
+          className="mt-20"
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 1.2 }}
+        >
+          <div className="text-center mb-12">
+            <h3 className="font-serif text-3xl md:text-4xl font-medium text-foreground mb-4">
+              What I bring to a team
+            </h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Beyond technical skills, I focus on creating value and solving real problems
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              "I don't just build features — I solve workflow problems",
+              "I focus on efficiency, not just functionality", 
+              "I can take a system from idea to production",
+              "I understand both technical and business needs"
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center group hover:shadow-lg transition-all duration-300"
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 1.4 + index * 0.1 }}
+                whileHover={{ y: -5 }}
+              >
+                <p className="text-muted-foreground leading-relaxed">{item}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )

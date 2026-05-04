@@ -221,9 +221,41 @@ export function ProjectsSection() {
                   <div className="flex items-start justify-between mb-3">
                     <h3 className="font-serif text-2xl font-medium text-foreground flex-1">{project.title}</h3>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
-                    {project.description}
-                  </p>
+                  <div className="text-muted-foreground text-sm mb-5 leading-relaxed space-y-3">
+                    {project.description.split('\n\n').map((section, sectionIndex) => {
+                      if (section.startsWith('**Problem:**')) {
+                        return (
+                          <div key={sectionIndex}>
+                            <span className="font-semibold text-destructive">Problem:</span>
+                            <span className="ml-1">{section.replace('**Problem:**', '').trim()}</span>
+                          </div>
+                        );
+                      } else if (section.startsWith('**Solution:**')) {
+                        return (
+                          <div key={sectionIndex}>
+                            <span className="font-semibold text-primary">Solution:</span>
+                            <span className="ml-1">{section.replace('**Solution:**', '').trim()}</span>
+                          </div>
+                        );
+                      } else if (section.startsWith('**Impact:**')) {
+                        const items = section.replace('**Impact:**', '').trim().split('\n');
+                        return (
+                          <div key={sectionIndex}>
+                            <div className="font-semibold text-secondary mb-1">Impact:</div>
+                            <ul className="space-y-1 ml-4">
+                              {items.filter(item => item.startsWith('•')).map((item, itemIndex) => (
+                                <li key={itemIndex} className="flex items-start gap-2">
+                                  <span className="text-secondary mt-1">•</span>
+                                  <span>{item.replace('•', '').trim()}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      }
+                      return <p key={sectionIndex}>{section}</p>;
+                    })}
+                  </div>
                   <div className="flex flex-wrap gap-2 mb-5">
                     {project.tags.map((tag, i) => (
                       <motion.div

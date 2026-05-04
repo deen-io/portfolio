@@ -8,12 +8,12 @@ export function Footer() {
     <footer className="py-8 px-6 border-t border-border/50">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <motion.p 
-          className="text-sm text-muted-foreground"
+          className="text-sm text-muted-foreground flex items-center gap-1 whitespace-nowrap"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          &copy; 2026 Dina Fajardo. Crafted with love
+          &copy; 2026 Dina Fajardo. Crafted with <Heart className="w-4 h-4 text-primary fill-primary inline" />
         </motion.p>
         <motion.p 
           className="text-sm text-muted-foreground flex items-center gap-1"
@@ -21,7 +21,7 @@ export function Footer() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          Made with <Heart className="w-4 h-4 text-primary fill-primary" /> using Next.js
+          Minimal by design. Built with purpose.
         </motion.p>
       </div>
     </footer>
