@@ -22,15 +22,23 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/img/logo.png',
-        media: '(prefers-color-scheme: light)',
+        url: '/img/icon.png',
+        sizes: '32x32',
+        type: 'image/png',
       },
       {
-        url: '/img/logo.png',
-        media: '(prefers-color-scheme: dark)',
+        url: '/img/icon.svg',
+        type: 'image/svg+xml',
       },
     ],
-    apple: '/img/logo.png',
+    apple: [
+      {
+        url: '/img/icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
+    shortcut: '/img/icon.png',
   },
 }
 
