@@ -76,7 +76,7 @@ export function ContactSection() {
                 asChild
               >
                 <a 
-                  href="/files/Dina Fajardo CV.pdf" 
+                  href="/files/Fajardo, Dina CV.pdf" 
                   download="Dina_Fajardo_CV.pdf"
                   className="flex items-center gap-2"
                 >

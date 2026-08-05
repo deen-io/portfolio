@@ -26,22 +26,12 @@ export function HeroSection() {
         style={{ y }}
       />
       
-      {/* Background logo for whole section */}
-      <motion.img 
-        src="/img/icon.png" 
-        alt="" 
-        className="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/3 w-[120vw] h-[120vh] object-contain opacity-20 pointer-events-none z-0"
-        initial={{ opacity: 0, scale: 0.8, x: 100 }}
-        animate={{ opacity: 0.7, scale: 1, x: 0 }}
-        transition={{ duration: 1, delay: 2 }}
-      />
-      
       {/* Decorative blobs with parallax */}
       <FloatingBlob className="w-[500px] h-[500px] bg-primary/20 -top-32 -left-32" />
       <FloatingBlob className="w-[400px] h-[400px] bg-secondary/30 top-1/3 -right-20" delay={2} />
       <FloatingBlob className="w-[300px] h-[300px] bg-accent/40 bottom-20 left-1/4" delay={4} />
 
-      <motion.div style={{ opacity }} className="relative z-10 text-left px-6 max-w-5xl mx-auto lg:ml-16 xl:ml-24">
+      <motion.div style={{ opacity }} className="relative z-10 text-center px-6 max-w-5xl mx-auto">
         {/* Animated badge */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -129,7 +119,7 @@ export function HeroSection() {
               asChild
             >
               <a 
-                href="/files/Dina Fajardo CV.pdf" 
+                href="/files/Fajardo, Dina CV.pdf" 
                 download="Dina_Fajardo_CV.pdf"
                 className="flex items-center gap-2"
               >
