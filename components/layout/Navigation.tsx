@@ -16,12 +16,21 @@ export function Navigation() {
 
   useEffect(() => {
     const observers: IntersectionObserver[] = []
-    NAV_ITEMS.forEach(({ id }) => {
+    // "skills" is a sub-anchor nested inside the "about" section, not a
+    // true top-level section — it stays clickable via its href, but it
+    // shouldn't compete with "about" for the active-highlight, since their
+    // detection bands necessarily overlap.
+    const observableIds = NAV_ITEMS.map((item) => item.id).filter((id) => id !== 'skills')
+    observableIds.forEach((id) => {
       const el = document.getElementById(id)
       if (!el) return
+      // A thin detection band near the top of the viewport, rather than a
+      // percentage-of-target threshold — the latter breaks down when
+      // sections vary wildly in height (a section taller than the viewport
+      // can never satisfy a 40%-visible threshold).
       const io = new IntersectionObserver(
         ([e]) => { if (e.isIntersecting) setActive(id) },
-        { threshold: 0.4 }
+        { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
       )
       io.observe(el)
       observers.push(io)
