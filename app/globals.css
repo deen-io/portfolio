@@ -209,7 +209,7 @@
 .hero-name-rail {
   position: absolute;
   left: 14px;
-  top: 42%;
+  top: 8%;
   transform: translateY(-50%);
   z-index: 2;
   display: flex;
