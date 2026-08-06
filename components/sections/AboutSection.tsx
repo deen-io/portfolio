@@ -166,27 +166,123 @@ export function AboutSection() {
 
           {/* Rotating ring card */}
           <Reveal delay={120} className="bento-ring">
-            <RingCard text="Available for new opportunities · Full-Stack Engineer · " size={148} />
+            <div
+              style={{
+                position: 'relative',
+                height: '100%',
+                minHeight: '200px',
+                borderRadius: '24px',
+                overflow: 'hidden',
+                background: 'linear-gradient(135deg, #B07DFF, #8B5CF6)',
+                border: '1px solid rgba(255,255,255,0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {/* Glow highlights */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  top: '-30%',
+                  left: '-20%',
+                  width: '75%',
+                  height: '75%',
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%)',
+                  filter: 'blur(6px)',
+                }}
+              />
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  bottom: '-28%',
+                  right: '-18%',
+                  width: '65%',
+                  height: '65%',
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(58,15,120,0.45), transparent 70%)',
+                  filter: 'blur(6px)',
+                }}
+              />
+
+              {/* Dot texture */}
+              <svg aria-hidden="true" width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.3 }}>
+                <defs>
+                  <pattern id="ringTexture" width="14" height="14" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="white" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#ringTexture)" />
+              </svg>
+
+              <RingCard text="Available for new opportunities · Full-Stack Engineer · " size={148} textColor="#FFFFFF" glass={false}>
+                <div
+                  style={{
+                    position: 'relative',
+                    zIndex: 1,
+                    width: '88px',
+                    height: '88px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: '2px solid rgba(255,255,255,0.85)',
+                    boxShadow: '0 6px 20px -6px rgba(58,15,120,0.5)',
+                  }}
+                >
+                  <img
+                    src="/img/profile-image-02.png"
+                    alt={personalInfo.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+              </RingCard>
+            </div>
           </Reveal>
 
           {/* Availability card */}
           <Reveal delay={140} className="bento-status">
             <div
               className="glass"
-              style={{ borderRadius: '24px', padding: '28px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+              style={{ borderRadius: '24px', padding: '28px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}
             >
-              <div>
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background:
+                    'radial-gradient(circle at 85% 0%, rgba(176,125,255,0.3), transparent 55%), radial-gradient(circle at 0% 100%, rgba(139,92,246,0.2), transparent 55%)',
+                }}
+              />
+              <svg aria-hidden="true" width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.5 }}>
+                <defs>
+                  <pattern id="statusDots" width="16" height="16" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="rgba(176,125,255,0.3)" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#statusDots)" />
+              </svg>
+
+              <div style={{ position: 'relative', zIndex: 1 }}>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.16em', color: '#9CA3AF', textTransform: 'uppercase', marginBottom: '12px' }}>
                   Status
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#B07DFF', display: 'block', boxShadow: '0 0 0 3px rgba(176,125,255,0.2)' }} />
+                  <span style={{ position: 'relative', width: '8px', height: '8px' }}>
+                    <span
+                      className="animate-ping-pin"
+                      style={{ position: 'absolute', inset: '-6px', borderRadius: '50%', background: 'rgba(176,125,255,0.35)' }}
+                    />
+                    <span style={{ position: 'relative', width: '8px', height: '8px', borderRadius: '50%', background: '#B07DFF', display: 'block', boxShadow: '0 0 0 3px rgba(176,125,255,0.2)' }} />
+                  </span>
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#1A1A1A' }}>
                     Available
                   </span>
                 </div>
               </div>
-              <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF', lineHeight: 1.5 }}>
+              <div style={{ position: 'relative', zIndex: 1, fontFamily: 'var(--font-body)', fontSize: '13px', color: '#9CA3AF', lineHeight: 1.5 }}>
                 Full-time · Contract<br />Senior Engineer roles
               </div>
             </div>

@@ -29,27 +29,7 @@ export function ContactSection() {
         scrollMarginTop: '80px',
       }}
     >
-      {/* Ghost background text */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: '-40px',
-          right: '-20px',
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(100px, 18vw, 260px)',
-          fontWeight: 200,
-          fontStyle: 'italic',
-          color: 'rgba(176,125,255,0.07)',
-          lineHeight: 1,
-          userSelect: 'none',
-          pointerEvents: 'none',
-          whiteSpace: 'nowrap',
-        }}
-      >
-        hello
-      </div>
-
+      
       <div className="section-pad-x" style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 48px', position: 'relative', zIndex: 1 }}>
         <div className="contact-grid">
 

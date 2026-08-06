@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import { Ring } from './Ring'
 
 interface RingCardProps {
@@ -8,10 +8,12 @@ interface RingCardProps {
   size?: number
   glass?: boolean
   className?: string
+  style?: CSSProperties
+  textColor?: string
   children?: ReactNode
 }
 
-export function RingCard({ text, size = 148, glass = true, className, children }: RingCardProps) {
+export function RingCard({ text, size = 148, glass = true, className, style, textColor, children }: RingCardProps) {
   const dimension = `min(${size}px, 82vw)`
   const ringAndContent = (
     <div
@@ -25,14 +27,14 @@ export function RingCard({ text, size = 148, glass = true, className, children }
       }}
     >
       <div style={{ position: 'absolute', inset: 0 }}>
-        <Ring text={text} size={size} />
+        <Ring text={text} size={size} color={textColor} />
       </div>
       {children}
     </div>
   )
 
   if (!glass) {
-    return <div className={className}>{ringAndContent}</div>
+    return <div className={className} style={style}>{ringAndContent}</div>
   }
 
   return (
@@ -46,6 +48,7 @@ export function RingCard({ text, size = 148, glass = true, className, children }
         padding: '28px',
         height: '100%',
         minHeight: '200px',
+        ...style,
       }}
     >
       {ringAndContent}
