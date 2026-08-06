@@ -72,32 +72,32 @@ export function HeroSection() {
         style={{
           position: 'absolute',
           left: '40px',
-          top: '50%',
+          top: '40%',
           transform: 'translateY(-50%)',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '18px',
+          width: '200px',
           zIndex: 2,
         }}
       >
-        <div style={{ width: '1px', height: '48px', background: 'rgba(176,125,255,0.3)' }} />
         <span
           style={{
             display: 'inline-block',
-            transform: 'rotate(-90deg)',
+            transform: 'translateX(-10px) rotate(-90deg)',
             whiteSpace: 'nowrap',
-            fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
+            fontFamily: 'var(--font-name)',
             fontWeight: 400,
-            fontSize: '30px',
+            fontSize: 'clamp(110px, 12vw, 210px)',
+            background: 'linear-gradient(135deg, #B07DFF, #8B5CF6)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
             color: 'transparent',
-            WebkitTextStroke: '1.1px #B07DFF',
             letterSpacing: '0.01em',
           }}
         >
           {firstName}
         </span>
-        <span style={{ color: '#B07DFF', fontSize: '14px', opacity: 0.8 }}>✦</span>
       </div>
 
       <div
@@ -134,6 +134,7 @@ export function HeroSection() {
           position: 'relative',
           zIndex: 1,
           width: '100%',
+          left: '100px'
         }}
       >
         {/* Text column */}
@@ -141,8 +142,8 @@ export function HeroSection() {
           <h1
             style={{
               fontFamily: 'var(--font-name)',
-              fontSize: 'clamp(64px, 9.5vw, 140px)',
-              fontWeight: 400,
+              fontSize: 'clamp(104px, 15.5vw, 180px)',
+              fontWeight: 500,
               lineHeight: 0.9,
               color: '#1A1A1A',
               letterSpacing: '-0.01em',
