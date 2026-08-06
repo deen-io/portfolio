@@ -7,7 +7,7 @@ export const personalInfo = {
   description:
     "I build scalable, reliable systems that solve real business problems — not just interfaces.",
   bio:
-    "10+ years building scalable SaaS and enterprise platforms — from logistics and procurement systems to recruitment tools. I specialize in Node.js and Laravel backends, RESTful API design, and end-to-end feature delivery, from architecture through deployment. Currently a Software Engineer at Cody Web Development Inc.",
+    "10+ years building scalable SaaS and enterprise platforms — from logistics and procurement systems to recruitment tools. I specialize in Node.js and Laravel backends, RESTful API design, and end-to-end feature delivery, from architecture through deployment.",
   stats: [
     { number: "10+", label: "Years Experience" },
     { number: "20+", label: "Projects Completed" },
