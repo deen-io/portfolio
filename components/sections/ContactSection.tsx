@@ -1,115 +1,277 @@
 'use client'
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
-import { Github, Linkedin, Mail, Send, Download } from "lucide-react"
-import { personalInfo } from "@/lib/data"
-import { SplitText } from "@/components/animations/TextAnimations"
-import { FloatingBlob, SparkleDecoration, MagneticButton } from "@/components/animations/InteractiveElements"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react'
+import { personalInfo, socialLinks } from '@/lib/data'
+import { Reveal } from '@/components/animations/Reveal'
+
+const githubLink = socialLinks.find((s) => s.label === 'GitHub')
+const linkedinLink = socialLinks.find((s) => s.label === 'LinkedIn')
 
 export function ContactSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [form, setForm] = useState({ email: '', message: '' })
+  const [sent, setSent] = useState(false)
 
-  const socialLinks = [
-    { icon: Github, href: "https://github.com/deen-io", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/dina-fajardo/", label: "LinkedIn" },
-    { icon: Mail, href: "mailto:dina.mar.fajardo@gmail.com", label: "Email" },
-  ]
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const subject = encodeURIComponent(`Portfolio inquiry from ${form.email}`)
+    const body = encodeURIComponent(`${form.message}\n\n— ${form.email}`)
+    window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`
+    setSent(true)
+  }
 
   return (
-    <section id="contact" className="py-32 px-6 relative overflow-hidden">
-      <FloatingBlob className="w-80 h-80 bg-primary/15 -right-20 top-0" delay={2.5} />
-      <FloatingBlob className="w-64 h-64 bg-secondary/20 -left-10 bottom-10" delay={3.5} />
-      
-      <div ref={ref} className="max-w-4xl mx-auto text-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-        >
-          <motion.div
-            animate={{ rotate: [0, 10, -10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-          >
-            <SparkleDecoration className="w-8 h-8 mx-auto mb-6" />
-          </motion.div>
-          <p className="text-sm tracking-widest text-primary uppercase mb-4">Get in Touch</p>
-          <h2 className="font-serif text-4xl md:text-6xl font-medium text-foreground mb-8">
-            <SplitText>Let&apos;s Create Together</SplitText>
-          </h2>
-          <motion.p 
-            className="text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed text-lg"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.5 }}
-          >
-            I&apos;m always excited to connect with fellow creators and explore new opportunities. 
-            Whether you have a project in mind or just want to say hello, I&apos;d love to hear from you.
-          </motion.p>
+    <section
+      id="contact"
+      style={{
+        background: '#1A1A1A',
+        position: 'relative',
+        overflow: 'hidden',
+        scrollMarginTop: '80px',
+      }}
+    >
+      {/* Ghost background text */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: '-40px',
+          right: '-20px',
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(100px, 18vw, 260px)',
+          fontWeight: 200,
+          fontStyle: 'italic',
+          color: 'rgba(176,125,255,0.07)',
+          lineHeight: 1,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        hello
+      </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.7 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
-          >
-            <MagneticButton>
-              <Button 
-                size="lg" 
-                className="rounded-full bg-primary hover:bg-primary/90 text-white px-8 py-3 transition-all duration-300 group"
-                asChild
-              >
-                <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2">
-                  <Send className="w-4 h-4" />
-                  Send me an email
-                </a>
-              </Button>
-            </MagneticButton>
-            
-            <MagneticButton>
-              <Button 
-                variant="outline"
-                size="lg" 
-                className="rounded-full border-primary/30 text-primary hover:bg-primary/10 hover:border-primary group"
-                asChild
-              >
-                <a 
-                  href="/files/Fajardo, Dina CV.pdf" 
-                  download="Dina_Fajardo_CV.pdf"
-                  className="flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4 group-hover:animate-bounce" />
-                  Download Resume
-                </a>
-              </Button>
-            </MagneticButton>
-          </motion.div>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 48px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
 
-          {/* Social links */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.9 }}
-            className="flex items-center justify-center gap-6"
-          >
-            {socialLinks.map((social, i) => (
-              <MagneticButton key={social.label}>
-                <motion.a
-                  href={social.href}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 1 + i * 0.1 }}
-                  className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-5 h-5" />
-                </motion.a>
-              </MagneticButton>
-            ))}
-          </motion.div>
-        </motion.div>
+          {/* Left — editorial invitation */}
+          <Reveal>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: '#B07DFF', textTransform: 'uppercase', marginBottom: '32px' }}>
+              04 — Contact
+            </div>
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(40px, 5vw, 72px)',
+                fontWeight: 200,
+                color: 'white',
+                lineHeight: 1.05,
+                marginBottom: '28px',
+              }}
+            >
+              {"Let's make"}<br />
+              {"something worth"}<br />
+              <em style={{ color: '#B07DFF' }}>{"remembering."}</em>
+            </h2>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '15px',
+                fontWeight: 300,
+                lineHeight: 1.75,
+                color: 'rgba(255,255,255,0.45)',
+                maxWidth: '380px',
+                marginBottom: '40px',
+              }}
+            >
+              Open to full-time roles, contract work, and selective collaborations.
+              I&apos;d love to hear about what you&apos;re building.
+            </p>
+
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <a
+                href={`mailto:${personalInfo.email}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  color: 'white',
+                  textDecoration: 'none',
+                  borderBottom: '1px solid rgba(255,255,255,0.2)',
+                  paddingBottom: '2px',
+                  transition: 'border-color 0.2s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#B07DFF')}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)')}
+              >
+                {personalInfo.email}
+              </a>
+              <a
+                href={linkedinLink?.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  color: 'rgba(255,255,255,0.5)',
+                  textDecoration: 'none',
+                  borderBottom: '1px solid transparent',
+                  paddingBottom: '2px',
+                  transition: 'color 0.2s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#B07DFF')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}
+              >
+                LinkedIn →
+              </a>
+            </div>
+          </Reveal>
+
+          {/* Right — form */}
+          <Reveal delay={100}>
+            {sent ? (
+              <div
+                style={{
+                  background: 'rgba(176,125,255,0.1)',
+                  border: '1px solid rgba(176,125,255,0.2)',
+                  borderRadius: '24px',
+                  padding: '48px',
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '28px', color: 'white', fontWeight: 300, marginBottom: '12px' }}>
+                  Opening your email app…
+                </div>
+                <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(255,255,255,0.4)' }}>
+                  Send it from there and {"I'll"} get back to you shortly.
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {[
+                  { key: 'email', label: 'Email', type: 'email', ph: 'you@company.com' },
+                  { key: 'message', label: 'Message', type: 'textarea', ph: 'Tell me about your project...' },
+                ].map(({ key, label, type, ph }) => (
+                  <div key={key}>
+                    <label
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '10px',
+                        letterSpacing: '0.15em',
+                        color: 'rgba(255,255,255,0.3)',
+                        textTransform: 'uppercase',
+                        display: 'block',
+                        marginBottom: '10px',
+                      }}
+                    >
+                      {label}
+                    </label>
+                    {type === 'textarea' ? (
+                      <textarea
+                        required
+                        rows={5}
+                        placeholder={ph}
+                        value={(form as Record<string, string>)[key]}
+                        onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '14px 18px',
+                          background: 'rgba(255,255,255,0.05)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '14px',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '14px',
+                          color: 'white',
+                          outline: 'none',
+                          resize: 'vertical',
+                          transition: 'border-color 0.2s',
+                        }}
+                        onFocus={(e) => (e.target.style.borderColor = 'rgba(176,125,255,0.5)')}
+                        onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.1)')}
+                      />
+                    ) : (
+                      <input
+                        type={type}
+                        required
+                        placeholder={ph}
+                        value={(form as Record<string, string>)[key]}
+                        onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '14px 18px',
+                          background: 'rgba(255,255,255,0.05)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '14px',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '14px',
+                          color: 'white',
+                          outline: 'none',
+                          transition: 'border-color 0.2s',
+                        }}
+                        onFocus={(e) => (e.target.style.borderColor = 'rgba(176,125,255,0.5)')}
+                        onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.1)')}
+                      />
+                    )}
+                  </div>
+                ))}
+
+                <button type="submit" className="cta-solid" style={{ alignSelf: 'flex-start', marginTop: '4px' }}>
+                  Send
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" /></svg>
+                </button>
+              </form>
+            )}
+          </Reveal>
+        </div>
+      </div>
+
+      {/* Colophon footer */}
+      <div
+        style={{
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          padding: '24px 48px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px',
+        }}
+      >
+        <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '15px', color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>
+          {personalInfo.name} © 2026
+        </span>
+        <div style={{ display: 'flex', gap: '28px' }}>
+          {[
+            { label: 'GitHub', href: githubLink?.href, external: true },
+            { label: 'LinkedIn', href: linkedinLink?.href, external: true },
+            { label: 'Resume', href: '/files/Fajardo, Dina CV.pdf', external: false },
+          ].map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              target={l.external ? '_blank' : undefined}
+              rel={l.external ? 'noopener noreferrer' : undefined}
+              download={l.label === 'Resume' ? 'Dina_Fajardo_CV.pdf' : undefined}
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                letterSpacing: '0.12em',
+                color: 'rgba(255,255,255,0.25)',
+                textDecoration: 'none',
+                textTransform: 'uppercase',
+                transition: 'color 0.2s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#B07DFF')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}
+            >
+              {l.label}
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   )

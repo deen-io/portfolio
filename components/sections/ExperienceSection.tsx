@@ -1,84 +1,121 @@
 'use client'
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
-import { experiences } from "@/lib/data"
-import { SplitText } from "@/components/animations/TextAnimations"
-import { FloatingBlob } from "@/components/animations/InteractiveElements"
-import { Card, CardContent } from "@/components/ui/card"
+import { experiences } from '@/lib/data'
+import { useReveal } from '@/components/animations/Reveal'
 
-export function ExperienceSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+function startYear(period: string) {
+  return period.split('-')[0].trim()
+}
+
+function ExperienceRow({ r, i }: { r: (typeof experiences)[0]; i: number }) {
+  const { ref, visible } = useReveal()
+  const year = startYear(r.period)
 
   return (
-    <section id="experience" className="py-32 px-6 bg-muted/30 relative overflow-hidden">
-      <FloatingBlob className="w-72 h-72 bg-accent/20 left-0 bottom-0" delay={1.5} />
-      
-      <div ref={ref} className="max-w-4xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+    <div
+      ref={ref}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 3fr',
+        gap: '0',
+        borderTop: '1px solid rgba(176,125,255,0.14)',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'none' : 'translateY(20px)',
+        transition: `opacity 0.8s ease ${i * 80}ms, transform 0.8s ease ${i * 80}ms`,
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Year — giant faded */}
+      <div style={{ padding: '48px 0 48px 48px', position: 'relative' }}>
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: '-10px',
+            left: '-10px',
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(80px, 10vw, 130px)',
+            fontWeight: 200,
+            color: 'rgba(176,125,255,0.08)',
+            lineHeight: 1,
+            userSelect: 'none',
+            pointerEvents: 'none',
+          }}
         >
-          <p className="text-sm tracking-widest text-primary uppercase mb-4">My Journey</p>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground">
-            <SplitText>Experience</SplitText>
-          </h2>
-        </motion.div>
-
-        <div className="relative">
-          {/* Animated timeline line */}
-          <motion.div 
-            className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary via-primary/50 to-transparent md:-translate-x-1/2"
-            initial={{ scaleY: 0 }}
-            animate={isInView ? { scaleY: 1 } : {}}
-            transition={{ duration: 1.5, delay: 0.3 }}
-            style={{ originY: 0 }}
-          />
-
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={exp.role}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 + index * 0.2 }}
-              className={`relative pl-8 md:pl-0 pb-16 last:pb-0 ${
-                index % 2 === 0 ? "md:pr-[50%] md:text-right" : "md:pl-[50%]"
-              }`}
-            >
-              {/* Animated timeline dot */}
-              <motion.div 
-                className="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-primary border-4 border-background md:-translate-x-1/2 -translate-y-1/2 top-2 z-10"
-                initial={{ scale: 0 }}
-                animate={isInView ? { scale: 1 } : {}}
-                transition={{ duration: 0.3, delay: 0.5 + index * 0.2, type: "spring" }}
-              />
-              
-              {/* Pulse effect */}
-              <motion.div 
-                className="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-primary/30 md:-translate-x-1/2 -translate-y-1/2 top-2"
-                animate={{ scale: [1, 2, 1], opacity: [0.5, 0, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
-              />
-              
-              <div className={`${index % 2 === 0 ? "md:pr-12" : "md:pl-12"}`}>
-                <Card className="bg-card border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 group overflow-hidden">
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  />
-                  <CardContent className="p-6 relative">
-                    <p className="text-sm text-primary font-medium mb-2">{exp.period}</p>
-                    <h3 className="font-serif text-xl font-medium text-foreground mb-1">{exp.role}</h3>
-                    <p className="text-sm text-primary/70 mb-4">{exp.company}</p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{exp.description}</p>
-                  </CardContent>
-                </Card>
-              </div>
-            </motion.div>
-          ))}
+          {year}
         </div>
+        <div style={{ position: 'relative', zIndex: 1, marginTop: '8px' }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 300, color: '#1A1A1A' }}>
+            {year}
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.12em', color: '#B07DFF', textTransform: 'uppercase', marginTop: '6px' }}>
+            {r.period}
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ padding: '48px 80px 48px 48px', borderLeft: '1px solid rgba(176,125,255,0.14)' }}>
+        <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: '#B07DFF', marginBottom: '6px' }}>
+          {r.company}
+        </div>
+        <h3
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(20px, 2vw, 26px)',
+            fontWeight: 300,
+            color: '#1A1A1A',
+            marginBottom: '16px',
+          }}
+        >
+          {r.role}
+        </h3>
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '15px',
+            fontWeight: 300,
+            lineHeight: 1.75,
+            color: '#6B7280',
+            marginBottom: '20px',
+            maxWidth: '520px',
+          }}
+        >
+          {r.description}
+        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          {r.tags.map((t) => <span key={t} className="pill">{t}</span>)}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function ExperienceSection() {
+  return (
+    <section id="experience" style={{ background: '#EFEAF8', scrollMarginTop: '80px' }}>
+      <div style={{ padding: '80px 48px 0', maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: '#B07DFF', textTransform: 'uppercase' }}>
+            03 — Experience
+          </span>
+          <div style={{ flex: 1, height: '1px', background: 'rgba(176,125,255,0.18)' }} />
+        </div>
+        <h2
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(36px, 5vw, 64px)',
+            fontWeight: 200,
+            color: '#1A1A1A',
+            marginBottom: '48px',
+          }}
+        >
+          Where {"I've"} worked.
+        </h2>
+      </div>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        {experiences.map((r, i) => <ExperienceRow key={r.company} r={r} i={i} />)}
       </div>
     </section>
   )

@@ -1,23 +1,40 @@
 import type { Metadata } from 'next'
-import { Playfair_Display, Inter } from 'next/font/google'
+import { Fraunces, DM_Sans, DM_Mono, Anton } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const playfair = Playfair_Display({ 
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: '--font-serif',
+  variable: '--font-display',
+  style: ["normal", "italic"],
+  weight: ["200", "300", "400", "500", "600", "700"],
   display: 'swap',
 });
 
-const inter = Inter({ 
+const anton = Anton({
   subsets: ["latin"],
-  variable: '--font-sans',
+  variable: '--font-name',
+  weight: ["400"],
+  display: 'swap',
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: '--font-body',
+  weight: ["300", "400", "500"],
+  display: 'swap',
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  variable: '--font-mono',
+  weight: ["300", "400", "500"],
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'Dina Fajardo | Software Engineer',
-  description: 'Creative software engineer crafting elegant digital experiences with code and curiosity.',
+  title: 'Dina Fajardo | Senior Full-Stack Software Engineer',
+  description: 'Senior Full-Stack Software Engineer building scalable SaaS and enterprise systems with Node.js, Laravel, React, and AWS.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -49,7 +66,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth bg-background">
-      <body className={`${playfair.variable} ${inter.variable} font-sans antialiased`}>
+      <body className={`${fraunces.variable} ${dmSans.variable} ${dmMono.variable} ${anton.variable} font-body antialiased`}>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

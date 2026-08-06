@@ -1,22 +1,42 @@
 'use client'
 
-import { Sparkles } from "lucide-react"
 import { marqueeItems } from "@/lib/data"
-import { Marquee } from "@/components/animations/InteractiveElements"
 
-export function MarqueeSection() {
+export function MarqueeSection({ reverse = false }: { reverse?: boolean }) {
+  const items = reverse ? [...marqueeItems].reverse() : marqueeItems
+  const repeated = [...items, ...items]
+
   return (
-    <div className="py-8 bg-primary/5 overflow-hidden">
-      <Marquee speed={40}>
-        <span className="flex items-center gap-8 mx-8 text-2xl md:text-3xl font-serif text-foreground/20">
-          {marqueeItems.map((item, index) => (
-            <span key={`marquee-${index}`} className="flex items-center gap-8">
-              <span>{item}</span>
-              <Sparkles className="w-4 h-4" />
+    <div
+      style={{
+        overflow: 'hidden',
+        borderTop: '1px solid rgba(176,125,255,0.16)',
+        borderBottom: '1px solid rgba(176,125,255,0.16)',
+        background: '#EFEAF8',
+        padding: '14px 0',
+        userSelect: 'none',
+      }}
+    >
+      <div className="animate-marquee" style={{ display: 'flex', gap: '0', whiteSpace: 'nowrap', width: 'max-content' }}>
+        {repeated.map((item, i) => (
+          <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '0' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '12px',
+                fontWeight: 400,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#6B7280',
+                padding: '0 28px',
+              }}
+            >
+              {item}
             </span>
-          ))}
-        </span>
-      </Marquee>
+            <span style={{ color: '#B07DFF', fontSize: '10px', opacity: 0.7 }}>✦</span>
+          </span>
+        ))}
+      </div>
     </div>
   )
 }

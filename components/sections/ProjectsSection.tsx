@@ -1,325 +1,166 @@
 'use client'
 
-import { useRef, useState, useEffect } from "react"
-import { motion, useInView } from "framer-motion"
-import { Eye, Code2, Camera, ChevronLeft, ChevronRight } from "lucide-react"
-import { projects } from "@/lib/data"
-import { SplitText } from "@/components/animations/TextAnimations"
-import { FloatingBlob } from "@/components/animations/InteractiveElements"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react'
+import { projects } from '@/lib/data'
+import { Reveal, useReveal } from '@/components/animations/Reveal'
 
-export function ProjectsSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [currentSnapshots, setCurrentSnapshots] = useState<{ [key: number]: number }>({})
+const ACCENTS = ['#B07DFF', '#8B5CF6']
 
-  // Handle manual navigation
-  const nextSnapshot = (projectIndex: number) => {
-    const project = projects[projectIndex]
-    if (project.snapshots.length > 1) {
-      setCurrentSnapshots(prev => ({
-        ...prev,
-        [projectIndex]: ((prev[projectIndex] || 0) + 1) % project.snapshots.length
-      }))
-    }
-  }
-
-  const prevSnapshot = (projectIndex: number) => {
-    const project = projects[projectIndex]
-    if (project.snapshots.length > 1) {
-      setCurrentSnapshots(prev => ({
-        ...prev,
-        [projectIndex]: ((prev[projectIndex] || 0) - 1 + project.snapshots.length) % project.snapshots.length
-      }))
-    }
-  }
-
-  // Auto-cycle through snapshots for projects without demos (slower since we have manual controls)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSnapshots(prev => {
-        const newSnapshots = { ...prev }
-        projects.forEach((project, index) => {
-          if (!project.demoLink && project.snapshots.length > 1) {
-            newSnapshots[index] = ((prev[index] || 0) + 1) % project.snapshots.length
-          }
-        })
-        return newSnapshots
-      })
-    }, 8000) // Change snapshot every 8 seconds (slower for manual control)
-
-    return () => clearInterval(interval)
-  }, [])
+function ProjectStrip({ p, index }: { p: (typeof projects)[0]; index: number }) {
+  const { ref, visible } = useReveal()
+  const [hovered, setHovered] = useState(false)
+  const flip = index % 2 === 1
+  const accent = ACCENTS[index % ACCENTS.length]
 
   return (
-    <section id="projects" className="py-32 px-6 relative">
-      <FloatingBlob className="w-96 h-96 bg-secondary/20 -right-32 top-1/3" delay={3} />
-      
-      <div ref={ref} className="max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+    <div
+      ref={ref}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        minHeight: '520px',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'none' : 'translateY(32px)',
+        transition: 'opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1)',
+        borderTop: '1px solid rgba(176,125,255,0.14)',
+      }}
+      className="project-strip"
+    >
+      {/* Image side */}
+      <div
+        style={{
+          order: flip ? 2 : 1,
+          position: 'relative',
+          overflow: 'hidden',
+          background: '#EDE9FE',
+        }}
+      >
+        <img
+          src={p.image}
+          alt={p.title}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94)',
+            transform: hovered ? 'scale(1.05)' : 'scale(1)',
+          }}
+        />
+        {/* index overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '24px',
+            left: '24px',
+            fontFamily: 'var(--font-display)',
+            fontSize: '80px',
+            fontWeight: 200,
+            color: 'rgba(255,255,255,0.6)',
+            lineHeight: 1,
+            pointerEvents: 'none',
+            userSelect: 'none',
+          }}
         >
-          <p className="text-sm tracking-widest text-primary uppercase mb-4">My Work</p>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground">
-            <SplitText>Featured Projects</SplitText>
-          </h2>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 60 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-              onHoverStart={() => setHoveredIndex(index)}
-              onHoverEnd={() => setHoveredIndex(null)}
-            >
-              <Card className="group h-full bg-card border-border/50 overflow-hidden hover:shadow-2xl transition-all duration-700 relative">
-                <motion.div
-                  className="aspect-video relative overflow-hidden bg-muted"
-                  animate={{ scale: hoveredIndex === index ? 1.02 : 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {/* Show snapshot or main image */}
-                  {!project.demoLink && project.snapshots.length > 0 ? (
-                    <motion.img 
-                      key={`${index}-${currentSnapshots[index] || 0}`}
-                      src={project.snapshots[currentSnapshots[index] || 0]}
-                      alt={`${project.title} snapshot`}
-                      className="w-full h-full object-cover blur-sm"
-                      animate={{ 
-                        scale: hoveredIndex === index ? 1.1 : 1,
-                        opacity: 1
-                      }}
-                      initial={{ opacity: 0 }}
-                      transition={{ duration: 0.5, opacity: { duration: 0.3 } }}
-                    />
-                  ) : (
-                    <motion.img 
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                      animate={{ 
-                        scale: hoveredIndex === index ? 1.1 : 1,
-                      }}
-                      transition={{ duration: 0.5 }}
-                    />
-                  )}
-                  
-                  {/* Animated overlay */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  
-                  {/* Project action buttons or snapshot indicator */}
-                  {project.demoLink || project.githubLink ? (
-                    <motion.div
-                      className="absolute inset-0 flex items-center justify-center gap-3"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {project.demoLink && (
-                        <Button 
-                          size="sm" 
-                          className="rounded-full bg-card/90 text-foreground hover:bg-card border border-border/20"
-                          asChild
-                        >
-                          <a href={project.demoLink} target="_blank" rel="noopener noreferrer">
-                            <Eye className="w-4 h-4 mr-2" />
-                            Live Demo
-                          </a>
-                        </Button>
-                      )}
-                      {project.githubLink && (
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="rounded-full bg-muted/90 text-foreground hover:bg-muted border border-border/20"
-                          asChild
-                        >
-                          <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
-                            <Code2 className="w-4 h-4 mr-2" />
-                            Code
-                          </a>
-                        </Button>
-                      )}
-                    </motion.div>
-                  ) : project.snapshots.length > 0 && (
-                    <motion.div
-                      className="absolute inset-0 flex items-center justify-center"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className="bg-card/90 backdrop-blur-sm rounded-full px-4 py-2 border border-border/20">
-                        <div className="flex items-center gap-2 text-sm text-foreground">
-                          <Camera className="w-4 h-4" />
-                          <span>Project Snapshot</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Always visible snapshot indicator for projects without demos */}
-                  {!project.demoLink && project.snapshots.length > 0 && (
-                    <div className="absolute top-3 right-3 bg-muted/80 backdrop-blur-sm rounded-full px-3 py-1">
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Camera className="w-3 h-3" />
-                        <span>Preview</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Snapshot counter for multiple snapshots */}
-                  {!project.demoLink && project.snapshots.length > 1 && (
-                    <div className="absolute bottom-3 left-3 bg-muted/80 backdrop-blur-sm rounded-full px-2 py-1">
-                      <span className="text-xs text-muted-foreground">
-                        {(currentSnapshots[index] || 0) + 1} / {project.snapshots.length}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Navigation buttons for snapshots */}
-                  {!project.demoLink && project.snapshots.length > 1 && (
-                    <div className="absolute bottom-3 right-3 flex gap-1">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault()
-                          prevSnapshot(index)
-                        }}
-                        className="w-8 h-8 rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
-                        aria-label="Previous snapshot"
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault()
-                          nextSnapshot(index)
-                        }}
-                        className="w-8 h-8 rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
-                        aria-label="Next snapshot"
-                      >
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  )}
-                </motion.div>
-                
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-serif text-2xl font-medium text-foreground flex-1">{project.title}</h3>
-                  </div>
-                  <div className="text-muted-foreground text-sm mb-5 leading-relaxed space-y-3">
-                    {project.description.split('\n\n').map((section, sectionIndex) => {
-                      if (section.startsWith('**Problem:**')) {
-                        return (
-                          <div key={sectionIndex}>
-                            <span className="font-semibold text-destructive">Problem:</span>
-                            <span className="ml-1">{section.replace('**Problem:**', '').trim()}</span>
-                          </div>
-                        );
-                      } else if (section.startsWith('**Solution:**')) {
-                        return (
-                          <div key={sectionIndex}>
-                            <span className="font-semibold text-primary">Solution:</span>
-                            <span className="ml-1">{section.replace('**Solution:**', '').trim()}</span>
-                          </div>
-                        );
-                      } else if (section.startsWith('**Impact:**')) {
-                        const items = section.replace('**Impact:**', '').trim().split('\n');
-                        return (
-                          <div key={sectionIndex}>
-                            <div className="font-semibold text-secondary mb-1">Impact:</div>
-                            <ul className="space-y-1 ml-4">
-                              {items.filter(item => item.startsWith('•')).map((item, itemIndex) => (
-                                <li key={itemIndex} className="flex items-start gap-2">
-                                  <span className="text-secondary mt-1">•</span>
-                                  <span>{item.replace('•', '').trim()}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        );
-                      }
-                      return <p key={sectionIndex}>{section}</p>;
-                    })}
-                  </div>
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {project.tags.map((tag, i) => (
-                      <motion.div
-                        key={tag}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ delay: 0.6 + index * 0.1 + i * 0.05 }}
-                      >
-                        <Badge 
-                          variant="outline" 
-                          className="border-primary/30 text-primary text-xs hover:bg-primary/10 transition-colors"
-                        >
-                          {tag}
-                        </Badge>
-                      </motion.div>
-                    ))}
-                  </div>
-                  
-                  {/* Action buttons */}
-                  {(project.demoLink || project.githubLink || project.snapshots.length > 0) && (
-                    <div className="flex gap-2 pt-4 border-t border-border/20">
-                      {project.demoLink ? (
-                        <Button 
-                          size="sm" 
-                          className="flex-1 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-                          asChild
-                        >
-                          <a href={project.demoLink} target="_blank" rel="noopener noreferrer">
-                            <Eye className="w-4 h-4 mr-2" />
-                            Live Demo
-                          </a>
-                        </Button>
-                      ) : project.snapshots.length > 0 && (
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="flex-1 rounded-full border-border/50 text-muted-foreground cursor-default"
-                          disabled
-                        >
-                          <Camera className="w-4 h-4 mr-2" />
-                          Preview Only
-                        </Button>
-                      )}
-                      {project.githubLink && (
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="flex-1 rounded-full border-border/50 hover:bg-muted transition-all duration-300"
-                          asChild
-                        >
-                          <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
-                            <Code2 className="w-4 h-4 mr-2" />
-                            View Code
-                          </a>
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+          {String(index + 1).padStart(2, '0')}
         </div>
       </div>
+
+      {/* Text side */}
+      <div
+        style={{
+          order: flip ? 1 : 2,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: 'clamp(40px, 6vw, 80px)',
+          background: flip ? '#EFEAF8' : '#F8F7FB',
+        }}
+      >
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.18em', color: '#9CA3AF', textTransform: 'uppercase', marginBottom: '20px' }}>
+          {p.category}
+        </div>
+
+        <h2
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(30px, 3.5vw, 48px)',
+            fontWeight: 300,
+            color: '#1A1A1A',
+            lineHeight: 1.15,
+            marginBottom: '20px',
+          }}
+        >
+          {p.title}
+        </h2>
+
+        <div style={{ width: '40px', height: '1px', background: accent, marginBottom: '24px' }} />
+
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '15px',
+            fontWeight: 300,
+            lineHeight: 1.8,
+            color: '#6B7280',
+            marginBottom: '24px',
+            maxWidth: '440px',
+          }}
+        >
+          {p.summary}
+        </p>
+
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.08em', color: accent, marginBottom: '28px' }}>
+          {p.highlight}
+        </div>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '36px' }}>
+          {p.tags.map((t) => (
+            <span key={t} className="pill">{t}</span>
+          ))}
+        </div>
+
+        {p.demoLink && (
+          <a href={p.demoLink} target="_blank" rel="noopener noreferrer" className="cta-outline" style={{ width: 'fit-content', fontSize: '12px' }}>
+            View Live Demo
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+          </a>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export function ProjectsSection() {
+  return (
+    <section id="projects" style={{ background: '#F8F7FB', scrollMarginTop: '80px' }}>
+      <div style={{ padding: '80px 48px 40px', maxWidth: '1200px', margin: '0 auto' }}>
+        <Reveal>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: '#B07DFF', textTransform: 'uppercase' }}>
+              02 — Selected Work
+            </span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(176,125,255,0.18)' }} />
+          </div>
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(36px, 5vw, 64px)',
+              fontWeight: 200,
+              color: '#1A1A1A',
+              lineHeight: 1.05,
+            }}
+          >
+            {"Things I've"}{' '}
+            <em style={{ color: '#B07DFF' }}>shipped.</em>
+          </h2>
+        </Reveal>
+      </div>
+
+      {projects.map((p, index) => (
+        <ProjectStrip key={p.title} p={p} index={index} />
+      ))}
     </section>
   )
 }
