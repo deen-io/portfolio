@@ -31,6 +31,7 @@ export function Navigation() {
 
   return (
     <nav
+      className="side-nav"
       style={{
         position: 'fixed',
         right: '28px',

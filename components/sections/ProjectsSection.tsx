@@ -135,7 +135,7 @@ function ProjectStrip({ p, index }: { p: (typeof projects)[0]; index: number }) 
 export function ProjectsSection() {
   return (
     <section id="projects" style={{ background: '#F8F7FB', scrollMarginTop: '80px' }}>
-      <div style={{ padding: '80px 48px 40px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="section-pad-x" style={{ padding: '80px 48px 40px', maxWidth: '1200px', margin: '0 auto' }}>
         <Reveal>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: '#B07DFF', textTransform: 'uppercase' }}>

@@ -14,9 +14,8 @@ function ExperienceRow({ r, i }: { r: (typeof experiences)[0]; i: number }) {
   return (
     <div
       ref={ref}
+      className="exp-grid"
       style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 3fr',
         gap: '0',
         borderTop: '1px solid rgba(176,125,255,0.14)',
         opacity: visible ? 1 : 0,
@@ -27,7 +26,7 @@ function ExperienceRow({ r, i }: { r: (typeof experiences)[0]; i: number }) {
       }}
     >
       {/* Year — giant faded */}
-      <div style={{ padding: '48px 0 48px 48px', position: 'relative' }}>
+      <div className="section-pad-x" style={{ padding: '48px 0 48px 48px', position: 'relative' }}>
         <div
           aria-hidden="true"
           style={{
@@ -56,7 +55,7 @@ function ExperienceRow({ r, i }: { r: (typeof experiences)[0]; i: number }) {
       </div>
 
       {/* Content */}
-      <div style={{ padding: '48px 80px 48px 48px', borderLeft: '1px solid rgba(176,125,255,0.14)' }}>
+      <div className="exp-content" style={{ padding: '48px 80px 48px 48px' }}>
         <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, color: '#B07DFF', marginBottom: '6px' }}>
           {r.company}
         </div>
@@ -95,7 +94,7 @@ function ExperienceRow({ r, i }: { r: (typeof experiences)[0]; i: number }) {
 export function ExperienceSection() {
   return (
     <section id="experience" style={{ background: '#EFEAF8', scrollMarginTop: '80px' }}>
-      <div style={{ padding: '80px 48px 0', maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="section-pad-x" style={{ padding: '80px 48px 0', maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: '#B07DFF', textTransform: 'uppercase' }}>
             03 — Experience

@@ -50,8 +50,8 @@ export function ContactSection() {
         hello
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 48px', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
+      <div className="section-pad-x" style={{ maxWidth: '1200px', margin: '0 auto', padding: '100px 48px', position: 'relative', zIndex: 1 }}>
+        <div className="contact-grid">
 
           {/* Left — editorial invitation */}
           <Reveal>
@@ -231,6 +231,7 @@ export function ContactSection() {
 
       {/* Colophon footer */}
       <div
+        className="section-pad-x"
         style={{
           borderTop: '1px solid rgba(255,255,255,0.06)',
           padding: '24px 48px',

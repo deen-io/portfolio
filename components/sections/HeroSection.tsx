@@ -1,7 +1,7 @@
 'use client'
 
 import { personalInfo, socialLinks } from '@/lib/data'
-import { Ring } from '@/components/animations/Ring'
+import { RingCard } from '@/components/animations/RingCard'
 
 const ICONS: Record<string, React.ReactNode> = {
   Github: (
@@ -66,38 +66,9 @@ export function HeroSection() {
         }}
       />
 
-      {/* Left rail */}
-      <div
-        className="hero-rail"
-        style={{
-          position: 'absolute',
-          left: '40px',
-          top: '40%',
-          transform: 'translateY(-50%)',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '18px',
-          width: '200px',
-          zIndex: 2,
-        }}
-      >
-        <span
-          style={{
-            display: 'inline-block',
-            transform: 'translateX(-10px) rotate(-90deg)',
-            whiteSpace: 'nowrap',
-            fontFamily: 'var(--font-name)',
-            fontWeight: 400,
-            fontSize: 'clamp(110px, 12vw, 210px)',
-            background: 'linear-gradient(135deg, #B07DFF, #8B5CF6)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            color: 'transparent',
-            letterSpacing: '0.01em',
-          }}
-        >
-          {firstName}
-        </span>
+      {/* Left rail — name */}
+      <div className="hero-name-rail">
+        <span className="hero-name-text">{firstName}</span>
       </div>
 
       <div
@@ -134,7 +105,6 @@ export function HeroSection() {
           position: 'relative',
           zIndex: 1,
           width: '100%',
-          left: '100px'
         }}
       >
         {/* Text column */}
@@ -142,7 +112,7 @@ export function HeroSection() {
           <h1
             style={{
               fontFamily: 'var(--font-name)',
-              fontSize: 'clamp(104px, 15.5vw, 180px)',
+              fontSize: 'clamp(56px, 15.5vw, 180px)',
               fontWeight: 500,
               lineHeight: 0.9,
               color: '#1A1A1A',
@@ -260,90 +230,45 @@ export function HeroSection() {
           style={{
             position: 'relative',
             height: 'clamp(420px, 62vh, 640px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             animation: 'fade-up-in 0.9s cubic-bezier(0.22,1,0.36,1) 0.3s both',
           }}
         >
-          {/* Soft blob behind the arch */}
+          {/* Soft blob behind the portrait */}
           <div
             aria-hidden="true"
             style={{
               position: 'absolute',
-              inset: '-30px',
-              borderRadius: '200px 200px 40px 40px',
+              width: '400px',
+              height: '400px',
+              borderRadius: '50%',
               background: 'radial-gradient(circle at 30% 20%, rgba(176,125,255,0.35), transparent 60%)',
               filter: 'blur(30px)',
             }}
           />
 
-          {/* Decorative curved line */}
-          <svg
-            aria-hidden="true"
-            width="100%"
-            height="100%"
-            viewBox="0 0 400 600"
-            preserveAspectRatio="none"
-            style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'visible' }}
-          >
-            <path
-              d="M 20 420 C 120 480, 200 470, 260 410 S 360 330, 390 355"
-              fill="none"
-              stroke="rgba(176,125,255,0.35)"
-              strokeWidth="1.5"
-            />
-          </svg>
-
-          {/* Arch portrait */}
-          <div
-            className="glass"
-            style={{
-              position: 'relative',
-              zIndex: 1,
-              width: '100%',
-              height: '100%',
-              borderRadius: '200px 200px 32px 32px',
-              overflow: 'hidden',
-              background: '#EDE9FE',
-            }}
-          >
-            <img
-              src="/img/profile-image.png"
-              alt={personalInfo.name}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </div>
-
-          {/* Sparkle accent */}
-          <span
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              bottom: '18%',
-              left: '-4px',
-              color: '#B07DFF',
-              fontSize: '20px',
-              zIndex: 2,
-            }}
-          >
-            ✦
-          </span>
-
-          {/* Rotating ring badge */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '-10px',
-              right: '-58px',
-              zIndex: 2,
-              width: '116px',
-              height: '116px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Ring text="OPTIMIZE · CODE · DESIGN · " size={116} />
-            <span style={{ position: 'absolute', color: '#B07DFF', fontSize: '15px' }}>✦</span>
-          </div>
+          <RingCard text="FULL-STACK SOFTWARE ENGINEER · PROBLEM SOLVER · CONTINOUS LEARNER · " size={360} glass={false}>
+            <div
+              className="glass"
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                width: 'min(250px, 57vw)',
+                height: 'min(250px, 57vw)',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                background: '#EDE9FE',
+              }}
+            >
+              <img
+                src="/img/profile-image-02.png"
+                alt={personalInfo.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+          </RingCard>
         </div>
       </div>
 

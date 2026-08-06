@@ -76,9 +76,16 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes ping-pin {
+  0%   { transform: scale(0.6); opacity: 0.7; }
+  70%  { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
 /* ── Utilities ─────────────────────────────────────── */
 
 .animate-marquee   { animation: marquee 28s linear infinite; }
+.animate-ping-pin  { animation: ping-pin 2.4s ease-out infinite; }
 .animate-float     { animation: float-subtle 7s ease-in-out infinite; }
 .animate-spin-ccw  { animation: spin-ccw 22s linear infinite; }
 
@@ -172,26 +179,122 @@
 }
 
 @media (max-width: 900px) {
-  .hero-shell { padding: 56px 24px 48px 24px; }
+  .hero-shell { padding: 56px 24px 48px 60px; }
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: 0.85fr 1.15fr;
   gap: 48px;
   align-items: center;
+  left: 100px;
 }
 
 @media (max-width: 900px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; left: 0; }
 }
 
 .hero-rail {
   display: flex;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   .hero-rail { display: none; }
+}
+
+/* ── Left rail — rotated name ──────────────────────── */
+/* Mobile-first: small, tucked in the reserved left gutter.
+   Widens and grows into the full desktop treatment at 900px+. */
+
+.hero-name-rail {
+  position: absolute;
+  left: 14px;
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+}
+
+.hero-name-text {
+  display: inline-block;
+  white-space: nowrap;
+  transform: rotate(-90deg);
+  font-family: var(--font-name);
+  font-weight: 400;
+  font-size: clamp(24px, 8.5vw, 50px);
+  letter-spacing: 0.01em;
+  background: linear-gradient(135deg, #B07DFF, #8B5CF6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (min-width: 900px) {
+  .hero-name-rail {
+    left: 40px;
+    top: 40%;
+    width: 200px;
+  }
+
+  .hero-name-text {
+    transform: translateX(-10px) rotate(-90deg);
+    font-size: clamp(110px, 12vw, 210px);
+  }
+}
+
+/* ── Side index nav ────────────────────────────────── */
+/* Hidden below the content max-width breakpoint, where there's no
+   longer a clear right-hand margin for it to sit in without
+   overlapping section content. */
+
+@media (max-width: 1280px) {
+  .side-nav { display: none !important; }
+}
+
+/* ── Section padding (mobile) ──────────────────────── */
+
+@media (max-width: 640px) {
+  .section-pad-x {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+/* ── Experience row grid ──────────────────────────── */
+
+.exp-grid {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+.exp-content {
+  border-left: 1px solid rgba(176, 125, 255, 0.14);
+}
+
+@media (max-width: 640px) {
+  .exp-grid { grid-template-columns: 1fr; }
+  .exp-content {
+    border-left: none;
+    border-top: 1px solid rgba(176, 125, 255, 0.14);
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+/* ── Contact grid ──────────────────────────────────── */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .contact-grid { grid-template-columns: 1fr; gap: 48px; }
 }
 
 /* ── Pill chip ─────────────────────────────────────── */
