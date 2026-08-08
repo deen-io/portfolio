@@ -1,7 +1,9 @@
 'use client'
 
+import { useState, type PointerEvent } from 'react'
 import { personalInfo, socialLinks } from '@/lib/data'
 import { RingCard } from '@/components/animations/RingCard'
+import { DotGridBackground } from '@/components/animations/DotGridBackground'
 
 const ICONS: Record<string, React.ReactNode> = {
   Github: (
@@ -24,6 +26,13 @@ const ICONS: Record<string, React.ReactNode> = {
 
 export function HeroSection() {
   const [firstName] = personalInfo.name.split(' ')
+  const [cursor, setCursor] = useState({ x: 0, y: 0 })
+  const [hovering, setHovering] = useState(false)
+
+  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    setCursor({ x: event.clientX - rect.left, y: event.clientY - rect.top })
+  }
 
   return (
     <section
@@ -37,7 +46,13 @@ export function HeroSection() {
         display: 'flex',
         alignItems: 'center',
       }}
+      onPointerEnter={() => setHovering(true)}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={() => setHovering(false)}
     >
+      {/* Interactive dot-grid background */}
+      <DotGridBackground cursor={cursor} hovering={hovering} />
+
       {/* Background blobs */}
       <div
         aria-hidden="true"
