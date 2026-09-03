@@ -1,24 +1,12 @@
 "use client"
 
-import { Navigation } from "@/components/layout/Navigation"
 import { HeroSection } from "@/components/sections/HeroSection"
-import { MarqueeSection } from "@/components/sections/MarqueeSection"
-import { AboutSection } from "@/components/sections/AboutSection"
-import { ProjectsSection } from "@/components/sections/ProjectsSection"
-import { ExperienceSection } from "@/components/sections/ExperienceSection"
-import { ContactSection } from "@/components/sections/ContactSection"
+import styles from "./page.module.scss"
 
 export default function Portfolio() {
   return (
-    <div className="font-body" style={{ background: '#F8F7FB' }}>
-      <Navigation />
+    <div className={`font-body ${styles.page}`}>
       <HeroSection />
-      <MarqueeSection />
-      <AboutSection />
-      <MarqueeSection reverse />
-      <ProjectsSection />
-      <ExperienceSection />
-      <ContactSection />
     </div>
   )
 }

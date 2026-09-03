@@ -65,7 +65,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="scroll-smooth bg-background">
+    <html lang="en" className="scroll-smooth">
       <body className={`${fraunces.variable} ${dmSans.variable} ${dmMono.variable} ${anton.variable} font-body antialiased`}>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

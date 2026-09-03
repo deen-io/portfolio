@@ -2,6 +2,7 @@
 
 import { CSSProperties, ReactNode } from 'react'
 import { Ring } from './Ring'
+import styles from './RingCard.module.scss'
 
 interface RingCardProps {
   text: string
@@ -16,17 +17,8 @@ interface RingCardProps {
 export function RingCard({ text, size = 148, glass = true, className, style, textColor, children }: RingCardProps) {
   const dimension = `min(${size}px, 82vw)`
   const ringAndContent = (
-    <div
-      style={{
-        position: 'relative',
-        width: dimension,
-        height: dimension,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div style={{ position: 'absolute', inset: 0 }}>
+    <div className={styles.wrap} style={{ width: dimension, height: dimension }}>
+      <div className={styles.ringLayer}>
         <Ring text={text} size={size} color={textColor} />
       </div>
       {children}
@@ -38,19 +30,7 @@ export function RingCard({ text, size = 148, glass = true, className, style, tex
   }
 
   return (
-    <div
-      className={`glass ${className ?? ''}`.trim()}
-      style={{
-        borderRadius: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '28px',
-        height: '100%',
-        minHeight: '200px',
-        ...style,
-      }}
-    >
+    <div className={`glass ${styles.glassWrap} ${className ?? ''}`.trim()} style={style}>
       {ringAndContent}
     </div>
   )

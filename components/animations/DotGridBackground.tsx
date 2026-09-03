@@ -1,5 +1,8 @@
 'use client'
 
+import type { CSSProperties } from 'react'
+import styles from './DotGridBackground.module.scss'
+
 interface DotGridBackgroundProps {
   cursor: { x: number; y: number }
   hovering: boolean
@@ -15,29 +18,11 @@ export function DotGridBackground({ cursor, hovering, color = 'rgba(176, 125, 25
 
   return (
     <>
+      <div aria-hidden="true" className={styles.base} style={{ '--dot-color': color } as CSSProperties} />
       <div
         aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `radial-gradient(circle at center, ${color} 1.2px, transparent 1.4px)`,
-          backgroundPosition: 'center',
-          backgroundSize: '18px 18px',
-        }}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `radial-gradient(circle at center, ${color} 2.16px, transparent 2.36px)`,
-          backgroundPosition: 'center',
-          backgroundSize: '18px 18px',
-          opacity: hovering ? 1 : 0,
-          maskImage: mask,
-          WebkitMaskImage: mask,
-          transition: 'opacity 0.25s ease',
-        }}
+        className={`${styles.bloom} ${hovering ? styles.hovering : ''}`}
+        style={{ '--dot-color': color, '--dot-mask': mask } as CSSProperties}
       />
     </>
   )

@@ -1,0 +1,23 @@
+.base {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at center, var(--dot-color) 1.2px, transparent 1.4px);
+  background-position: center;
+  background-size: 18px 18px;
+}
+
+.bloom {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at center, var(--dot-color) 2.16px, transparent 2.36px);
+  background-position: center;
+  background-size: 18px 18px;
+  opacity: 0;
+  mask-image: var(--dot-mask);
+  -webkit-mask-image: var(--dot-mask);
+  transition: opacity 0.25s ease;
+
+  &.hovering {
+    opacity: 1;
+  }
+}

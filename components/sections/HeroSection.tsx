@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, type PointerEvent } from 'react'
+import Link from 'next/link'
 import { personalInfo, socialLinks } from '@/lib/data'
 import { RingCard } from '@/components/animations/RingCard'
 import { DotGridBackground } from '@/components/animations/DotGridBackground'
+import styles from './HeroSection.module.scss'
 
 const ICONS: Record<string, React.ReactNode> = {
   Github: (
@@ -37,15 +39,7 @@ export function HeroSection() {
   return (
     <section
       id="opening"
-      className="hero-shell"
-      style={{
-        minHeight: '100svh',
-        background: '#F8F7FB',
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
-      }}
+      className={`hero-shell ${styles.section}`}
       onPointerEnter={() => setHovering(true)}
       onPointerMove={handlePointerMove}
       onPointerLeave={() => setHovering(false)}
@@ -54,49 +48,15 @@ export function HeroSection() {
       <DotGridBackground cursor={cursor} hovering={hovering} />
 
       {/* Background blobs */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '-120px',
-          left: '-100px',
-          width: '380px',
-          height: '380px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(176,125,255,0.25), transparent 70%)',
-          filter: 'blur(20px)',
-        }}
-      />
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: '-140px',
-          right: '-120px',
-          width: '420px',
-          height: '420px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(176,125,255,0.2), transparent 70%)',
-          filter: 'blur(20px)',
-        }}
-      />
+      <div aria-hidden="true" className={styles.blobTopLeft} />
+      <div aria-hidden="true" className={styles.blobBottomRight} />
 
       {/* Left rail — name */}
       <div className="hero-name-rail">
         <span className="hero-name-text">{firstName}</span>
       </div>
 
-      <div
-        className="hero-rail"
-        style={{
-          position: 'absolute',
-          left: '44px',
-          bottom: '48px',
-          flexDirection: 'column',
-          gap: '18px',
-          zIndex: 2,
-        }}
-      >
+      <div className={`hero-rail ${styles.socialRail}`}>
         {socialLinks.map((s) => (
           <a
             key={s.label}
@@ -104,9 +64,7 @@ export function HeroSection() {
             target={s.href.startsWith('http') ? '_blank' : undefined}
             rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
             aria-label={s.label}
-            style={{ color: '#6B7280', transition: 'color 0.2s', display: 'block' }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#B07DFF')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#6B7280')}
+            className={styles.socialLink}
           >
             {ICONS[s.icon]}
           </a>
@@ -114,180 +72,65 @@ export function HeroSection() {
       </div>
 
       {/* Main grid */}
-      <div
-        className="hero-grid"
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          width: '100%',
-        }}
-      >
+      <div className={`hero-grid ${styles.grid}`}>
         {/* Text column */}
-        <div style={{ animation: 'fade-up-in 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both' }}>
-          <h1
-            style={{
-              fontFamily: 'var(--font-name)',
-              fontSize: 'clamp(56px, 15.5vw, 180px)',
-              fontWeight: 500,
-              lineHeight: 0.9,
-              color: '#1A1A1A',
-              letterSpacing: '-0.01em',
-              margin: 0,
-            }}
-          >
+        <div className={styles.textColumn}>
+          <h1 className={styles.name}>
             {personalInfo.name.split(' ').slice(1).join(' ')}
           </h1>
 
-          <div
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '13px',
-              fontWeight: 600,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: '#1A1A1A',
-              marginTop: '20px',
-            }}
-          >
-            {personalInfo.role}
-          </div>
-          <div style={{ width: '40px', height: '2px', background: '#B07DFF', margin: '14px 0 22px' }} />
+          <div className={styles.role}>{personalInfo.role}</div>
+          <div className={styles.roleRule} />
 
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '15px',
-              fontWeight: 300,
-              color: '#6B7280',
-              maxWidth: '380px',
-              lineHeight: 1.7,
-              marginBottom: '32px',
-            }}
-          >
-            {personalInfo.description}
+          <p className={styles.paragraph}>
+            {"I build systems"} <em className={styles.emphasis}>{"that quietly just work"}</em>{" — for the people running the business."}
+          </p>
+          <p className={styles.paragraph}>
+            {personalInfo.bio}
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '48px' }}>
-            <a
-              href="#projects"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '13px 28px',
-                borderRadius: '100px',
-                background: 'linear-gradient(135deg, #B07DFF, #8B5CF6)',
-                color: 'white',
-                fontFamily: 'var(--font-body)',
-                fontSize: '13px',
-                fontWeight: 600,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                boxShadow: '0 10px 30px -8px rgba(176,125,255,0.6)',
-                transition: 'transform 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-            >
+          <div className={styles.ctaRow}>
+            <Link href="/projects" className={`${styles.ctaButton} ${styles.ctaPrimary}`}>
               View My Work
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-            </a>
+            </Link>
 
             <a
               href="/files/Fajardo, Dina CV.pdf"
               download="Dina_Fajardo_CV.pdf"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontFamily: 'var(--font-body)',
-                fontSize: '13px',
-                fontWeight: 600,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                color: '#1A1A1A',
-                textDecoration: 'none',
-                borderBottom: '1px solid rgba(26,26,26,0.25)',
-                paddingBottom: '3px',
-                transition: 'border-color 0.2s, color 0.2s',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#B07DFF'; e.currentTarget.style.color = '#B07DFF' }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(26,26,26,0.25)'; e.currentTarget.style.color = '#1A1A1A' }}
+              className={`${styles.ctaButton} ${styles.ctaSecondary}`}
             >
               Download Resume
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16" /></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
           </div>
 
-          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-            {personalInfo.stats.map((s, i) => (
-              <div
-                key={s.label}
-                style={{
-                  paddingRight: '36px',
-                  borderRight: i < personalInfo.stats.length - 1 ? '1px solid rgba(176,125,255,0.2)' : 'none',
-                }}
-              >
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '30px', fontWeight: 700, color: '#B07DFF', lineHeight: 1 }}>
-                  {s.number}
-                </div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#1A1A1A', marginTop: '4px' }}>
-                  {s.label}
-                </div>
+          <div className={styles.statsRow}>
+            {personalInfo.stats.map((s) => (
+              <div key={s.label} className={styles.statItem}>
+                <div className={styles.statNumber}>{s.number}</div>
+                <div className={styles.statLabel}>{s.label}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Portrait column */}
-        <div
-          style={{
-            position: 'relative',
-            height: 'clamp(420px, 62vh, 640px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            animation: 'fade-up-in 0.9s cubic-bezier(0.22,1,0.36,1) 0.3s both',
-          }}
-        >
+        <div className={styles.portraitColumn}>
           {/* Soft blob behind the portrait */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              width: '400px',
-              height: '400px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle at 30% 20%, rgba(176,125,255,0.35), transparent 60%)',
-              filter: 'blur(30px)',
-            }}
-          />
+          <div aria-hidden="true" className={styles.portraitBlob} />
 
           <RingCard text="FULL-STACK SOFTWARE ENGINEER · PROBLEM SOLVER · CONTINOUS LEARNER · " size={360} glass={false}>
-            <div
-              className="glass"
-              style={{
-                position: 'relative',
-                zIndex: 1,
-                width: 'min(250px, 57vw)',
-                height: 'min(250px, 57vw)',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                background: '#EDE9FE',
-              }}
-            >
+            <div className={`glass ${styles.portraitFrame}`}>
               <img
                 src="/img/profile-image-02.png"
                 alt={personalInfo.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                className={styles.portraitImage}
               />
             </div>
           </RingCard>
         </div>
       </div>
-
-      <style>{`@keyframes fade-up-in { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }`}</style>
     </section>
   )
 }

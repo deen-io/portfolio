@@ -1,0 +1,53 @@
+// Hidden below the content max-width breakpoint, where there's no
+// longer a clear right-hand margin for it to sit in without
+// overlapping section content.
+.nav {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+  @media (max-width: 1280px) {
+    display: none !important;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: transparent;
+  transition: color 0.3s;
+  text-transform: uppercase;
+  user-select: none;
+
+  &.active {
+    color: #8b3dff;
+  }
+}
+
+.dash {
+  width: 6px;
+  height: 1px;
+  background: rgba(26, 26, 26, 0.25);
+  border-radius: 1px;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  display: block;
+
+  &.active {
+    width: 20px;
+    background: #8b3dff;
+  }
+}

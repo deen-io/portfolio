@@ -10,15 +10,19 @@
   --color-ink: #1A1A1A;
   --color-ink-soft: #6B7280;
   --color-ink-ghost: rgba(26, 26, 26, 0.06);
-  --color-ground: #F8F7FB;
-  --color-ground-warm: #EFEAF8;
-  --color-violet: #B07DFF;
-  --color-violet-deep: #8B5CF6;
+  --color-ground: #CFE0FA;
+  --color-ground-warm: #F6CBE0;
+  --color-blue: #CFE0FA;
+  --color-green: #CFEFDA;
+  --color-lilac: #D9C4F7;
+  --color-pink: #F6CBE0;
+  --color-violet: #8B3DFF;
+  --color-violet-deep: #7D2AE7;
   --color-violet-mist: rgba(176, 125, 255, 0.08);
   --color-glass: rgba(255, 255, 255, 0.68);
   --color-border: rgba(176, 125, 255, 0.14);
 
-  --color-background: #F8F7FB;
+  --color-background: #CFE0FA;
   --color-foreground: #1A1A1A;
 }
 
@@ -28,12 +32,13 @@
   }
 
   html {
-    background: #F8F7FB;
+    background: linear-gradient(160deg, #CFE0FA 0%, #CFEFDA 33%, #D9C4F7 66%, #F6CBE0 100%);
+    background-attachment: fixed;
     color: #1A1A1A;
   }
 
   body {
-    background: #F8F7FB;
+    background: transparent;
     color: #1A1A1A;
   }
 
@@ -82,11 +87,17 @@
   100% { transform: scale(1.8); opacity: 0; }
 }
 
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Utilities ─────────────────────────────────────── */
 
 .animate-marquee   { animation: marquee 28s linear infinite; }
 .animate-ping-pin  { animation: ping-pin 2.4s ease-out infinite; }
 .animate-float     { animation: float-subtle 7s ease-in-out infinite; }
+.page-transition   { animation: page-fade-in 0.45s cubic-bezier(0.22,1,0.36,1) both; }
 .animate-spin-ccw  { animation: spin-ccw 22s linear infinite; }
 
 .font-display  { font-family: var(--font-display); }
@@ -108,20 +119,6 @@
 .rule {
   height: 1px;
   background: rgba(176, 125, 255, 0.18);
-}
-
-/* ── Project strip hover ───────────────────────────── */
-
-.project-strip {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 520px;
-  overflow: hidden;
-  position: relative;
-}
-
-@media (max-width: 900px) {
-  .project-strip { grid-template-columns: 1fr; }
 }
 
 .project-strip .img-side {
@@ -226,7 +223,7 @@
   font-weight: 400;
   font-size: clamp(24px, 8.5vw, 50px);
   letter-spacing: 0.01em;
-  background: linear-gradient(135deg, #B07DFF, #8B5CF6);
+  background: linear-gradient(135deg, #8B3DFF, #7D2AE7);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -245,15 +242,6 @@
   }
 }
 
-/* ── Side index nav ────────────────────────────────── */
-/* Hidden below the content max-width breakpoint, where there's no
-   longer a clear right-hand margin for it to sit in without
-   overlapping section content. */
-
-@media (max-width: 1280px) {
-  .side-nav { display: none !important; }
-}
-
 /* ── Section padding (mobile) ──────────────────────── */
 
 @media (max-width: 640px) {
@@ -264,25 +252,6 @@
 }
 
 /* ── Experience row grid ──────────────────────────── */
-
-.exp-grid {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-}
-
-.exp-content {
-  border-left: 1px solid rgba(176, 125, 255, 0.14);
-}
-
-@media (max-width: 640px) {
-  .exp-grid { grid-template-columns: 1fr; }
-  .exp-content {
-    border-left: none;
-    border-top: 1px solid rgba(176, 125, 255, 0.14);
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-  }
-}
 
 /* ── Contact grid ──────────────────────────────────── */
 
@@ -333,7 +302,7 @@
   cursor: pointer;
 }
 .cta-solid:hover {
-  background: #B07DFF;
+  background: #8B3DFF;
   transform: translateY(-1px);
 }
 
@@ -354,7 +323,7 @@
   cursor: pointer;
 }
 .cta-outline:hover {
-  border-color: #B07DFF;
-  color: #B07DFF;
+  border-color: #8B3DFF;
+  color: #8B3DFF;
   transform: translateY(-1px);
 }
